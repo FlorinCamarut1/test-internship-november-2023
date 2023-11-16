@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function Navigation() {
   return (
     <header>
-      <p className={styles}>Logo</p>
+      <p className={styles.logo}>Logo</p>
       <nav>
         <ul>
           <li>

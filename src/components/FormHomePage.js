@@ -5,12 +5,13 @@ function FormHomePage({
   onGetData,
   search,
   searchWord,
-  getLocalHostData,
+
   localData,
 }) {
   const onFormSubmit = (e) => {
     e.preventDefault();
   };
+
   return (
     <>
       <form onSubmit={onFormSubmit}>
@@ -28,10 +29,8 @@ function FormHomePage({
       </form>
       <div className={styles.container}>
         {localData.map((item) => (
-          <TableRow localData={item} />
+          <TableRow localData={item} key={item.name} id={item.name} />
         ))}
-
-        <button onClick={getLocalHostData}>Get Local Search</button>
       </div>
     </>
   );

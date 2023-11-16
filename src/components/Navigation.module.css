@@ -6,6 +6,7 @@ header {
   background-color: #347ab4;
 }
 .logo {
+  display: flex;
   font-size: x-large;
   width: 20px;
   height: 10px;
@@ -13,10 +14,10 @@ header {
 
 ul {
   display: flex;
+
   list-style: none;
   gap: 20px;
   justify-content: center;
-  align-items: center;
 }
 .links {
   text-decoration: none;

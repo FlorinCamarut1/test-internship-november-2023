@@ -12,11 +12,6 @@ function HomePage() {
   const searchWord = (e) => {
     setSearch(e.target.value);
   };
-  const getLocalHostData = () => {
-    const local = localStorage.getItem(search);
-    const parseLocalData = JSON.parse(local);
-    setLocalData((prevdata) => [...prevdata, parseLocalData]);
-  };
 
   async function apiCall() {
     const response = await fetch(
@@ -30,15 +25,15 @@ function HomePage() {
     const data = await response.json();
     setData(data);
 
-    localStorage.setItem(
-      search,
-      JSON.stringify({
+    setLocalData((prevData) => [
+      ...prevData,
+      {
         name: search,
         data,
         date: new Date().getDate(),
         hour: new Date().getHours(),
-      })
-    );
+      },
+    ]);
   }
 
   return (
@@ -48,7 +43,6 @@ function HomePage() {
         onGetData={apiCall}
         search={search}
         searchWord={searchWord}
-        getLocalHostData={getLocalHostData}
         localData={localData}
       />
       <Footer />
