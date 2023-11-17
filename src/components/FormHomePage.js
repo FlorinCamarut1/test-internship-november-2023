@@ -7,6 +7,7 @@ function FormHomePage({
   searchWord,
   onCloseHandler,
   localData,
+  onCurrentSelected,
 }) {
   const onFormSubmit = (e) => {
     e.preventDefault();
@@ -34,6 +35,7 @@ function FormHomePage({
             key={item.name}
             id={item.name}
             onCloseHandler={onCloseHandler}
+            onCurrentSelected={onCurrentSelected}
           />
         ))}
       </div>

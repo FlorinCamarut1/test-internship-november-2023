@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './TableRow.module.css';
-function TableRow({ localData, id, onCloseHandler }) {
+function TableRow({ localData, id, onCloseHandler, onCurrentSelected }) {
   return (
     <>
       <div className={styles.container}>
@@ -24,7 +24,10 @@ function TableRow({ localData, id, onCloseHandler }) {
           <li>
             <p>Actions</p>
           </li>
-          <button onClick={() => onCloseHandler(id)}>❌</button>
+          <div className={styles.actionContainer}>
+            <button onClick={() => onCloseHandler(id)}>❌</button>
+            <button onClick={() => onCurrentSelected(id)}>📩</button>
+          </div>
         </ul>
       </div>
     </>
