@@ -5,7 +5,7 @@ function FormHomePage({
   onGetData,
   search,
   searchWord,
-
+  onCloseHandler,
   localData,
 }) {
   const onFormSubmit = (e) => {
@@ -29,7 +29,12 @@ function FormHomePage({
       </form>
       <div className={styles.container}>
         {localData.map((item) => (
-          <TableRow localData={item} key={item.name} id={item.name} />
+          <TableRow
+            localData={item}
+            key={item.name}
+            id={item.name}
+            onCloseHandler={onCloseHandler}
+          />
         ))}
       </div>
     </>
