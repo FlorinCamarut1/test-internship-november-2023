@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import FormHomePage from '../components/FormHomePage';
@@ -17,6 +17,12 @@ function HomePage() {
   const [localData, setLocalData] = useState([]);
   const [currentItem, setCurrentItem] = useState();
   const [modalOpen, setModalOpen] = useState(false);
+  const [openData, setOpenData] = useState('');
+  useEffect(() => {
+    localData.map((item) =>
+      item.name === currentItem ? setOpenData(JSON.stringify(item.data)) : ''
+    );
+  }, [currentItem, localData]);
 
   const searchWord = (e) => {
     setSearch(e.target.value);
@@ -27,6 +33,9 @@ function HomePage() {
 
   const currentItemHandler = (id) => {
     setCurrentItem(id);
+    setModalOpen((modal) => !modal);
+  };
+  const closeModal = () => {
     setModalOpen((modal) => !modal);
   };
   async function apiCall() {
@@ -54,7 +63,7 @@ function HomePage() {
   return (
     <div>
       <Navigation />
-      {modalOpen && <Modal />}
+      {modalOpen && <Modal onCloseModal={closeModal} openData={openData} />}
       <FormHomePage
         onGetData={apiCall}
         search={search}
