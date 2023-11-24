@@ -18,6 +18,7 @@ function FormHomePage() {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    apiCall();
   };
   if (isLoading) return <Loading />;
   if (error) return <Error />;
@@ -32,9 +33,7 @@ function FormHomePage() {
           onChange={searchWord}
           required
         />
-        <button type='submit' onClick={apiCall}>
-          Search word
-        </button>
+        <button type='submit'>Search word</button>
       </form>
       <div className={styles.container}>
         {localData.map((item) => (
