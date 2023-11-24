@@ -1,4 +1,3 @@
-import Navigation from '../components/Navigation';
 import Footer from '../components/Footer';
 import FormHomePage from '../components/FormHomePage';
 
@@ -9,7 +8,6 @@ function HomePage() {
   const { modalOpen } = useItems();
   return (
     <div>
-      <Navigation />
       {modalOpen && <Modal />}
       <FormHomePage />
       <Footer />
