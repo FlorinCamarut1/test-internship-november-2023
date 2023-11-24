@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useReducer } from 'react';
 
 const getNewDate = new Date();
 const fullDate = `${getNewDate.getDate()} ${getNewDate.toLocaleString(
@@ -8,37 +8,86 @@ const fullDate = `${getNewDate.getDate()} ${getNewDate.toLocaleString(
 
 const ItemsContext = createContext();
 
+const initialState = {
+  data: [],
+  search: '',
+  localData: [],
+  currentItem: {},
+  modalOpen: false,
+  openData: '',
+  error: null,
+  isLoading: false,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'data':
+      return { ...state, data: action.payload };
+    case 'search':
+      return { ...state, search: action.payload };
+    case 'updateLocalData':
+      return { ...state, localData: [...state.localData, action.payload] };
+    case 'deleteItem':
+      return {
+        ...state,
+        localData: state.localData.filter(
+          (item) => item.name !== action.payload
+        ),
+      };
+    case 'selectedItem':
+      return { ...state, currentItem: action.payload };
+    case 'modalState':
+      return { ...state, modalOpen: !state.modalOpen };
+    case 'setModalData':
+      return { ...state, openData: JSON.stringify(action.payload) };
+    case 'error':
+      return { ...state, error: action.payload };
+    case 'loading':
+      return { ...state, isLoading: action.payload };
+    default:
+      throw new Error('no data to dispatch');
+  }
+};
+
 const ItemsProvider = ({ children }) => {
-  const [data, setData] = useState();
-  const [search, setSearch] = useState('');
-  const [localData, setLocalData] = useState([]);
-  const [currentItem, setCurrentItem] = useState();
-  const [modalOpen, setModalOpen] = useState(false);
-  const [openData, setOpenData] = useState('');
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [
+    {
+      data,
+      search,
+      localData,
+      currentItem,
+      modalOpen,
+      openData,
+      error,
+      isLoading,
+    },
+    dispatch,
+  ] = useReducer(reducer, initialState);
+
   useEffect(() => {
     localData.map((item) =>
-      item.name === currentItem ? setOpenData(JSON.stringify(item.data)) : ''
+      item.name === currentItem
+        ? dispatch({ type: 'setModalData', payload: item.data })
+        : ''
     );
   }, [currentItem, localData]);
 
   const searchWord = (e) => {
-    setSearch(e.target.value);
+    dispatch({ type: 'search', payload: e.target.value });
   };
   const closeHandler = (id) => {
-    setLocalData(localData.filter((item) => item.name !== id));
+    dispatch({ type: 'deleteItem', payload: id });
   };
 
   const currentItemHandler = (id) => {
-    setCurrentItem(id);
-    setModalOpen((modal) => !modal);
+    dispatch({ type: 'selectedItem', payload: id });
+    dispatch({ type: 'modalState' });
   };
   const closeModal = () => {
-    setModalOpen((modal) => !modal);
+    dispatch({ type: 'modalState' });
   };
   async function apiCall() {
-    setIsLoading(true);
+    dispatch({ type: 'loading', payload: true });
     if (search.length === 0) return;
     try {
       const response = await fetch(
@@ -54,22 +103,23 @@ const ItemsProvider = ({ children }) => {
       }
 
       const data = await response.json();
-      setData(data);
+      dispatch({ type: 'data', payload: data });
 
-      setLocalData((prevData) => [
-        ...prevData,
-        {
+      dispatch({
+        type: 'updateLocalData',
+        payload: {
           name: search,
           data,
           date: fullDate,
         },
-      ]);
+      });
     } catch (error) {
-      setError(error.message);
+      dispatch({ type: 'error', payload: error.message });
     } finally {
-      setIsLoading(false);
+      dispatch({ type: 'loading', payload: false });
     }
   }
+
   return (
     <ItemsContext.Provider
       value={{
