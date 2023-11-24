@@ -1,11 +1,13 @@
 import React from 'react';
 import styles from './Modal.module.css';
-function Modal({ onCloseModal, openData }) {
+import { useItems } from '../context/ItemsContext';
+function Modal() {
+  const { openData, closeModal } = useItems();
   return (
     <div className={styles.background}>
       <div className={styles.box}>
         <div className={styles.btnContainer}>
-          <button className={styles.closeBtn} onClick={onCloseModal}>
+          <button className={styles.closeBtn} onClick={closeModal}>
             ❌
           </button>
         </div>
