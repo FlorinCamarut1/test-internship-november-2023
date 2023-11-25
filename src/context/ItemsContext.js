@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useReducer } from 'react';
-
+import { ItemsReducer, initialState } from '../reducers/ItemsReducer';
 const getNewDate = new Date();
 const fullDate = `${getNewDate.getDate()} ${getNewDate.toLocaleString(
   'default',
@@ -7,47 +7,6 @@ const fullDate = `${getNewDate.getDate()} ${getNewDate.toLocaleString(
 )} ${getNewDate.getFullYear()} /${getNewDate.getHours()}:${getNewDate.getMinutes()}`;
 
 const ItemsContext = createContext();
-
-const initialState = {
-  data: [],
-  search: '',
-  localData: [],
-  currentItem: {},
-  modalOpen: false,
-  openData: '',
-  error: null,
-  isLoading: false,
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'data':
-      return { ...state, data: action.payload };
-    case 'search':
-      return { ...state, search: action.payload };
-    case 'updateLocalData':
-      return { ...state, localData: [...state.localData, action.payload] };
-    case 'deleteItem':
-      return {
-        ...state,
-        localData: state.localData.filter(
-          (item) => item.name !== action.payload
-        ),
-      };
-    case 'selectedItem':
-      return { ...state, currentItem: action.payload };
-    case 'modalState':
-      return { ...state, modalOpen: !state.modalOpen };
-    case 'setModalData':
-      return { ...state, openData: JSON.stringify(action.payload) };
-    case 'error':
-      return { ...state, error: action.payload };
-    case 'loading':
-      return { ...state, isLoading: action.payload };
-    default:
-      throw new Error('no data to dispatch');
-  }
-};
 
 const ItemsProvider = ({ children }) => {
   const [
@@ -62,7 +21,7 @@ const ItemsProvider = ({ children }) => {
       isLoading,
     },
     dispatch,
-  ] = useReducer(reducer, initialState);
+  ] = useReducer(ItemsReducer, initialState);
 
   useEffect(() => {
     localData.map((item) =>
