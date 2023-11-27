@@ -1,16 +1,27 @@
 import React from 'react';
 import TableRow from './TableRow';
 import styles from './FormHomePage.module.css';
-function FormHomePage({
-  onGetData,
-  search,
-  searchWord,
-  getLocalHostData,
-  localData,
-}) {
+import { useItems } from '../context/ItemsContext';
+import Loading from './Loading';
+import Error from './Error';
+function FormHomePage() {
+  const {
+    apiCall,
+    searchWord,
+    localData,
+    closeHandler,
+    currentItemHandler,
+    search,
+    isLoading,
+    error,
+  } = useItems();
+
   const onFormSubmit = (e) => {
     e.preventDefault();
+    apiCall();
   };
+  if (isLoading) return <Loading />;
+  if (error) return <Error />;
   return (
     <>
       <form onSubmit={onFormSubmit}>
@@ -22,16 +33,18 @@ function FormHomePage({
           onChange={searchWord}
           required
         />
-        <button type='submit' onClick={onGetData}>
-          Search word
-        </button>
+        <button type='submit'>Search word</button>
       </form>
       <div className={styles.container}>
         {localData.map((item) => (
-          <TableRow localData={item} />
+          <TableRow
+            localData={item}
+            key={item.name}
+            id={item.name}
+            onCloseHandler={closeHandler}
+            onCurrentSelected={currentItemHandler}
+          />
         ))}
-
-        <button onClick={getLocalHostData}>Get Local Search</button>
       </div>
     </>
   );

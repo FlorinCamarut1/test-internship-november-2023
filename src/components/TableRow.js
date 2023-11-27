@@ -1,35 +1,35 @@
 import React from 'react';
 import styles from './TableRow.module.css';
-function TableRow({ localData }) {
-  console.log(localData);
+function TableRow({ localData, id, onCloseHandler, onCurrentSelected }) {
   return (
     <>
-      <table>
-        <div>
-          <tr>
-            <td>Word</td>
-          </tr>
-          <tr>
-            <td>{localData?.name}</td>
-          </tr>
-        </div>
-        <div>
-          <tr>
-            <td>DateTime</td>
-          </tr>
-          <tr>
-            <td>{localData?.date}</td>
-          </tr>
-        </div>
-        <div>
-          <tr>
-            <td>Actions</td>
-          </tr>
-          <tr>
-            <td>{localData?.hour}</td>
-          </tr>
-        </div>
-      </table>
+      <div className={styles.container}>
+        <ul className={styles.table}>
+          <li>
+            <p>Word</p>
+          </li>
+          <li>
+            <p>{localData?.name}</p>
+          </li>
+        </ul>
+        <ul className={styles.table}>
+          <li>
+            <p>DateTime</p>
+          </li>
+          <li>
+            <p>{localData?.date}</p>
+          </li>
+        </ul>
+        <ul className={styles.table}>
+          <li>
+            <p>Actions</p>
+          </li>
+          <div className={styles.actionContainer}>
+            <button onClick={() => onCloseHandler(id)}>❌</button>
+            <button onClick={() => onCurrentSelected(id)}>📩</button>
+          </div>
+        </ul>
+      </div>
     </>
   );
 }
